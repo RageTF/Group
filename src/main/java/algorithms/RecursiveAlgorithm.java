@@ -9,8 +9,28 @@ import java.util.Arrays;
  */
 public class RecursiveAlgorithm implements TravellingSalesAlgorithm {
 
+    public static final String NAME="Полный перебор";
+
     private int minLength=-1;
     private int[] minPath;
+
+    @Override
+    public synchronized AlgorithmResult getHamiltonianPath(int[][] graph) {
+        AlgorithmResult algorithmResult=new AlgorithmResult(NAME,graph.length);
+        long first=System.nanoTime();
+        minLength=-1;
+        minPath=null;
+        boolean[] visited=new boolean[graph.length];
+        visited[0]=true;
+        int path[]=new int[graph.length];
+        path[0]=0;
+        rec(graph,visited,1,path);
+        long time=System.nanoTime()-first;
+        algorithmResult.setPath(minPath);
+        algorithmResult.setTime(time);
+        algorithmResult.setLength(minLength);
+        return algorithmResult;
+    }
 
     private void rec(int[][] graph,boolean[] visited,int countVisit,int[] path){
 
@@ -49,18 +69,6 @@ public class RecursiveAlgorithm implements TravellingSalesAlgorithm {
             }
         }
         return length;
-    }
-
-    @Override
-    public synchronized int[] getHamiltonianPath(int[][] graph) {
-        minLength=-1;
-        minPath=null;
-        boolean[] visited=new boolean[graph.length];
-        visited[0]=true;
-        int path[]=new int[graph.length];
-        path[0]=0;
-        rec(graph,visited,1,path);
-        return minPath;
     }
 
 }

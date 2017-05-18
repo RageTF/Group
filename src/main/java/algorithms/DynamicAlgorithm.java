@@ -8,11 +8,17 @@ import java.util.*;
  * Created by Rage on 15.05.2017.
  */
 public class DynamicAlgorithm implements TravellingSalesAlgorithm {
+
+    public static final String NAME="Динамическое программирование";
+
     @Override
-    public int[] getHamiltonianPath(int[][] graph) {
+    public synchronized AlgorithmResult getHamiltonianPath(int[][] graph) {
+        AlgorithmResult algorithmResult=new AlgorithmResult(NAME,graph.length);
 
         int minLength = -1;
         int[] minPath = null;
+
+        long first=System.nanoTime();
 
         HashMap<PointsSubset, int[]> h = new DynamicAlgorithm().rec(graph, graph.length);
         for (Map.Entry<PointsSubset, int[]> entry : h.entrySet()) {
@@ -28,10 +34,16 @@ public class DynamicAlgorithm implements TravellingSalesAlgorithm {
             }
 
         }
-        return minPath != null ? Arrays.copyOf(minPath, minPath.length - 1) : null;
+        long time=System.nanoTime()-first;
+
+        algorithmResult.setTime(time);
+        algorithmResult.setLength(minLength);
+        algorithmResult.setPath(minPath);
+        return algorithmResult;
     }
 
     private HashMap<PointsSubset, int[]> rec(int[][] graph, int subCount) {
+
         HashMap<PointsSubset, int[]> recExtra;
         if (subCount > 2) {
             recExtra = rec(graph, subCount - 1);
@@ -67,13 +79,12 @@ public class DynamicAlgorithm implements TravellingSalesAlgorithm {
                     if (j != 0) {
 
                         int min = -1;
-
                         PointsSubset minPs = null;
                         int[] minArr = null;
 
                         for (int i : subSet) {
                             if (i != j) {
-                                int[] c = removeFromArray(subSet, j, i);
+                                int[] c = removeAndCopyFromArray(subSet, j, i);
                                 int d = graph[j][i];
                                 if (d != GraphGenerator.NOT_EXIST) {
                                     int[] lengthAndPath = recExtra.get(new PointsSubset(c));
@@ -115,7 +126,7 @@ public class DynamicAlgorithm implements TravellingSalesAlgorithm {
                         int[] minArr = null;
                         for (int i : subSet) {
                             if (i != j) {
-                                int[] c = removeFromArray(subSet, j, i);
+                                int[] c = removeAndCopyFromArray(subSet, j, i);
                                 int d = graph[j][i];
                                 if (d != GraphGenerator.NOT_EXIST) {
                                     int[] lengthAndPath = recExtra.get(new PointsSubset(c));
@@ -150,7 +161,7 @@ public class DynamicAlgorithm implements TravellingSalesAlgorithm {
     }
 */
 
-    private int[] removeFromArray(int[] mas, int val, int finish) {
+    private int[] removeAndCopyFromArray(int[] mas, int val, int finish) {
         int[] mas1 = new int[mas.length];
         int count = 0;
         for (int i = 0; i < mas.length; i++) {
@@ -162,7 +173,7 @@ public class DynamicAlgorithm implements TravellingSalesAlgorithm {
         return mas1;
     }
 
-    private static class PointsSubset extends Object {
+    private static class PointsSubset {
 
         private int[] points;
 
