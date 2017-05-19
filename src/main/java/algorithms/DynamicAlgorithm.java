@@ -38,7 +38,8 @@ public class DynamicAlgorithm implements TravellingSalesAlgorithm {
 
         algorithmResult.setTime(time);
         algorithmResult.setLength(minLength);
-        algorithmResult.setPath(minPath);
+        if(minLength!=-1)
+        algorithmResult.setPath(Arrays.copyOf(minPath,minPath.length-1));
         return algorithmResult;
     }
 
@@ -114,53 +115,6 @@ public class DynamicAlgorithm implements TravellingSalesAlgorithm {
         }
         return result;
     }
-/*
-
-    HashMap<PointsSubset, int[]> rec(int p, int K, int N, int[] subSet, int[][] graph, HashMap<PointsSubset, int[]> recExtra, HashMap<PointsSubset, int[]> result) {
-        if (p == K) {
-            if (subSet[0] == 0) {
-                for (int j : subSet) {
-                    if (j != 0) {
-                        int min = -1;
-                        PointsSubset minPs = null;
-                        int[] minArr = null;
-                        for (int i : subSet) {
-                            if (i != j) {
-                                int[] c = removeAndCopyFromArray(subSet, j, i);
-                                int d = graph[j][i];
-                                if (d != GraphGenerator.NOT_EXIST) {
-                                    int[] lengthAndPath = recExtra.get(new PointsSubset(c));
-                                    if (lengthAndPath != null) {
-                                        int[] value = Arrays.copyOf(lengthAndPath, lengthAndPath.length + 1);
-                                        int length = value[lengthAndPath.length - 1] + d;
-                                        value[lengthAndPath.length - 1] = j;
-                                        value[lengthAndPath.length] = length;
-                                        int[] key = Arrays.copyOf(subSet, subSet.length + 1);
-                                        key[key.length - 1] = j;
-                                        if (min == -1 || length < min) {
-                                            min = length;
-                                            minPs = new PointsSubset(key);
-                                            minArr = value;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (min != -1) {
-                            result.put(minPs, minArr);
-                        }
-
-                    }
-                }
-            }
-        } else {
-            for (subSet[p] = (p > 0 ? subSet[p - 1] + 1 : 0); subSet[p] <= N; subSet[p]++)
-                rec(p + 1, K, N, subSet, graph, recExtra, result);
-        }
-        return result;
-    }
-*/
-
     private int[] removeAndCopyFromArray(int[] mas, int val, int finish) {
         int[] mas1 = new int[mas.length];
         int count = 0;

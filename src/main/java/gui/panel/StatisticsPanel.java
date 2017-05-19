@@ -81,7 +81,7 @@ public class StatisticsPanel extends JPanel {
 
                     if(algorithmResult!=null) {
                         g.fillRect(xColor,yColor, 10 ,10);
-                        g.drawString(" - "+algorithmResult.getName(), xColor + 25, yColor + 7);
+                        g.drawString(" - "+algorithmResult.getName()+ " , длина пути "+algorithmResult.getLength()+ " , путь "+Arrays.toString(algorithmResult.getPath()), xColor + 25, yColor + 7);
 
                         int width = WIDTH_RECT;
                         int height = (int) (algorithmResult.getTime() / k);
